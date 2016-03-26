@@ -1,6 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#84ffff</color>
+    <color name="colorPrimaryDark">#00e5ff</color>
+    <color name="colorAccent">#ffe082</color>
+
+    <color name="light_grey">#bdbdbd</color>
+    <color name="ambulance_color1">#ffe57f</color>
+    <color name="ambulance_color2">#ffd740</color>
+
+    <color name="ripple_color">#20000000</color>
+
+    <color name="t1">#FF4A4A</color>
+    <color name="t2">#FF8B46</color>
+    <color name="t3">#27Ba9D</color>
+    <color name="t4">#008FA7</color>
+    <color name="t5">#87649F</color>
+
+    <color name="t12">#FF6D6D</color>
+    <color name="t22">#FFA169</color>
+    <color name="t32">#48CAB0</color>
+    <color name="t42">#00CDF4</color>
+    <color name="t52">#AC91BE</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="white1">#EBEBEB</color>
+    <color name="white2">#D9D9D9</color>
+    <color name="white3">#C8C7C7</color>
+    <color name="white4">#B8B6B6</color>
+    <color name="white5">#A9A6A6</color>
+    <color name="white6">#9B9696</color>
+    <color name="white7">#8D8686</color>
+    <color name="white_line">#E0E0E0</color>
+
+    <color name="black5">#F2F2F2</color>
+    <color name="black4">#F0F0F0</color>
+    <color name="black3">#B2B2B2</color>
+    <color name="black2">#757575</color>
+    <color name="black1">#454545</color>
+    <color name="black0">#303030</color>
+    <color name="black">#212121</color>
+
+
+    <color name="black_alpha">#80000000</color>
+
+
+    //Cute color
+    <color name="cblue">#3FB8AF</color>
+    <color name="cbluelight">#7FC7AF</color>
+    <color name="cyellow">#DAD8A7</color>
+    <color name="cpinklight">#FF9E9D</color>
+    <color name="cpink">#FF3D7F</color>
+
+
+    <color name="facebook_blue">#3b5998</color>
+    <color name="facebook_blue_shadow">#2F4779</color>
+    <color name="google_red">#dc4a38</color>
+    <color name="google_red_shadow">#B03B2C</color>
+
+    <color name="light_me">#86D9FF</color>
+    <color name="light_1">#FFC486</color>
+    <color name="light_2">#FFE85B</color>
+    <color name="light_3">#CAECA2</color>
+    <color name="light_4">#6CE8EF</color>
+    <color name="light_5">#FFB5C8</color>
+    <color name="light_6">#E6B5FF</color>
+
+
+    <color name="v3_dodger_blue">#349cf1</color>
+    <color name="v3_lipstick">#e83c45</color>
+    <color name="v3_red">#ce3b4f</color>
+    <color name="v3_explore">#d04554</color>
+    <color name="v3_orange">#f5a623</color>
+    <color name="v3_pale_grey">#f6f8f9</color>
+    <color name="v3_light_navy">#156396</color>
+    <color name="v3_macaroni_and_cheese">#eaa93f</color>
+    <color name="v3_warm_grey">#9b9b9b</color>
+    <color name="v3_slate">#4a5c69</color>
+    <color name="v3_dark">#222b31</color>
+    <color name="v3_light_teal">#b0e1eb</color>
+    <color name="v3_seaweed_green">#3aaf65</color>
+    <color name="v3_background">#CFDBE7</color>
+    <color name="v3_blue_dark">#134f8a</color>
+    <color name="v3_blue_light">#ecf8fa</color>
+    <color name="v3_slate_light">#8ea7b1</color>
+    <color name="v3_text_gray">#b2b2b2</color>
+    <color name="v3_button_gray">#e1d7d7</color>
+    <color name="v3_background_title">#f1f4f5</color>
+    <color name="v3_background_button">#f2eeee</color>
+    <color name="v3_title_explore">#deffffff</color>
+    <color name="v3_dark_tran">#4d000000</color>
+    <color name="v3_dark_tran2">#9d000000</color>
+    <color name="v3_calender_background">#e8eff4</color>
+
+
+    <color name="slate_angel_group">#4a5c69</color>
+    <color name="grey_subtext">#b2b2b2</color>
+    <color name="light_navy">#156396</color>
+    <color name="light_navy_inactive">#5B92B5</color>
+    <color name="grey_shadow">#e5dcdc</color>
+    <color name="black_shadow">#4d000000</color>
+
+    <color name="v4_status_bar">#213247</color>
+    <color name="buttonGreen">#37cb41</color>
+    <color name="cb_secondary_button_grey">#e1d7d7</color>
+    <color name="cb_main_button_green">#3aaf65</color>
+    <color name="cb_main_button_green_shadow">#24954e</color>
+
+    <color name="dark_text">#FF3D3D3D</color>
+    <color name="cloud_blue">#349CF1</color>
+
+    <color name="v2_tomato">#e94e45</color>
+    <color name="v2_lipstick">#e91e63</color>
+    <color name="v2_tomato_2">#e91e45</color>
+    <color name="v2_lipstick_2">#b91e63</color>
+    <color name="v2_greyish_brown">#4a4a4a</color>
+    <color name="v2_warm_grey">#9b9b9b</color>
+    <color name="v2_text_pink">#e81e63</color>
+    <color name="v2_black_10">#000000</color>
+    <color name="v2_white_bg">#fafafa</color>
+    <color name="v2_dark_tran">#1e000000</color>
+    <color name="v2_blue_end">#198bb6</color>
+    <color name="v2_yellow">#fff24e</color>
+    <color name="v2_blue_start">#21649a</color>
+    <color name="v2_background_gray">#f8f8f8</color>
+    <color name="v2_background_receipt">#fffef0</color>
+
+
+    <color name="v2_tealish">#1aa89f</color>
+    <color name="v2_nice_blue">#198bb6</color>
+    <color name="v2_tealish_2">#1a789f</color>
+    <color name="v2_nice_blue_2">#196bb6</color>
 </resources>
