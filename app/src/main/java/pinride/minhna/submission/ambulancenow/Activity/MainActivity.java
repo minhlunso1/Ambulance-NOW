@@ -3,11 +3,11 @@ package pinride.minhna.submission.ambulancenow.Activity;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.widget.FrameLayout;
-
-        import pinride.minhna.submission.ambulancenow.AC;
-import pinride.minhna.submission.ambulancenow.AmbulanceFragment;
+import android.os.Bundle;
+import android.widget.FrameLayout;
+import pinride.minhna.submission.ambulancenow.AC;
+import pinride.minhna.submission.ambulancenow.Fragment.AmbulanceFragment;
+import pinride.minhna.submission.ambulancenow.Fragment.VictimFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment=null;
             if (getIntent().getIntExtra("type", 0)== AC.AMBULANCE)
                 fragment = AmbulanceFragment.newInstance();
+            else if (getIntent().getIntExtra("type", 0)== AC.VICTIM)
+                fragment = VictimFragment.newInstance();
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
             android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(android.R.id.content, fragment).commit();

@@ -12,6 +12,6 @@ public class AS {
     public static String profileImageUrl;
     public static LatLng fromLocation;
     public static LatLng endLocation;
-    public static LatLng currentLocation;
+    public static LatLng currentLocation = new LatLng(11.054282, 106.683191);
     public static ApiClient apiClient;
 }

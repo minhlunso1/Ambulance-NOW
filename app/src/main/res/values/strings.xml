@@ -26,4 +26,5 @@
     <string name="Arrived">Đã đến nơi</string>
     <string name="Cancel">Hủy</string>
     <string name="Please_turn_on_gps">Vui lòng kiểm tra GPS</string>
+    <string name="Please_get_another_location">Vui lòng chọn địa điểm khác</string>
 </resources>

@@ -1,36 +1,21 @@
-package pinride.minhna.submission.ambulancenow;
+package pinride.minhna.submission.ambulancenow.Fragment;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import pinride.minhna.submission.ambulancenow.Fragment.MapFragment;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import pinride.minhna.submission.ambulancenow.R;
 
 /**
  * Created by Minh on 3/26/2016.
  */
-public class AmbulanceFragment extends MapFragment implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class AmbulanceFragment extends MapFragment {
 
     @Bind(R.id.tv_from_ex)
     TextView pickAddress;
@@ -40,7 +25,6 @@ public class AmbulanceFragment extends MapFragment implements GoogleApiClient.Co
     TextView communicationWith;
 
     private Context context;
-    private GoogleApiClient mGoogleApiClient;
 
     public static AmbulanceFragment newInstance() {
         Bundle args = new Bundle();
@@ -53,13 +37,6 @@ public class AmbulanceFragment extends MapFragment implements GoogleApiClient.Co
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(context)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
     }
 
     @Nullable
@@ -72,55 +49,12 @@ public class AmbulanceFragment extends MapFragment implements GoogleApiClient.Co
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
     private void setupView() {
-
-    }
-
-    @OnClick(R.id.btn_current_location)
-    public void getCurrentLocation() {
-        udateCurrentLocation();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        udateCurrentLocation();
-    }
-
-    private void udateCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            android.location.Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                    mGoogleApiClient);
-            if (mLastLocation != null) {
-                final LatLng tmp = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                Utils.getAddress(tmp)
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Action1<String>() {
-                            @Override
-                            public void call(String s) {
-                                pickAddress.setTextColor(getResources().getColor(R.color.v2_greyish_brown));
-                                pickAddress.setText(s);
-                                AS.fromLocation = tmp;
-                            }
-                        }, new Action1<Throwable>() {
-                            @Override
-                            public void call(Throwable throwable) {
-                                throwable.printStackTrace();
-                            }
-                        });
-            }
-            else
-                Toast.makeText(context, context.getString(R.string.Please_turn_on_gps), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended ( int i){
-
-    }
-
-    @Override
-    public void onConnectionFailed (@NonNull ConnectionResult connectionResult){
 
     }
 
