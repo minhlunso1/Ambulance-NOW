@@ -16,7 +16,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/ion_android_locate_256_0_ffe57f_none" />
+            android:src="@drawable/fa_map_marker_32_0_ffe57f" />
 
         <TextView
             android:id="@+id/tv_from"
@@ -68,7 +68,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/fa_ambulance_256_0_ffe57f_none" />
+            android:src="@drawable/fa_ambulance_32_0_ffe57f" />
 
         <TextView
             android:id="@+id/tv_to"
@@ -91,12 +91,13 @@
             android:textColor="@color/v2_warm_grey" />
 
         <ImageView
-            android:id="@+id/img_delete_to"
+            android:id="@+id/img_phone"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:padding="14dp"
+            android:src="@drawable/fa_phone_32_0_ffe57f"
             android:visibility="invisible" />
     </RelativeLayout>
 </RelativeLayout>

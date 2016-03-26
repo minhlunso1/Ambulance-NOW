@@ -1,5 +1,7 @@
 package pinride.minhna.submission.ambulancenow.module;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by Minh on 3/26/2016.
  */
@@ -11,8 +13,8 @@ public class Status {
     private String victimImgUrl;
     private String ambulanceName;
     private String ambulanceImgUrl;
-    private boolean isReady;
     private String address;
+    private LatLng endLatLng;
 
     public Status(){}
 
@@ -24,12 +26,12 @@ public class Status {
         this.address = address;
     }
 
-    public boolean isReady() {
-        return isReady;
+    public LatLng getEndLatLng() {
+        return endLatLng;
     }
 
-    public void setReady(boolean ready) {
-        isReady = ready;
+    public void setEndLatLng(LatLng endLatLng) {
+        this.endLatLng = endLatLng;
     }
 
     public String getVictimId() {

@@ -1,6 +1,11 @@
 package pinride.minhna.submission.ambulancenow.compo;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.util.TypedValue;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -88,6 +93,13 @@ public class Utils {
 
     public static int dptopx(Context context, int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+    }
+
+    public void call(Context context){
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" + "0915897496"));
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)
+                context.startActivity(callIntent);
     }
 
 }

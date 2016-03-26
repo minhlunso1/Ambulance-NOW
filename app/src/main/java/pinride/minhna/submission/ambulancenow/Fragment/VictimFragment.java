@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -73,6 +74,8 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
     ListView lv;
     @Bind(R.id.content_lv)
     RelativeLayout content;
+    @Bind(R.id.img_phone)
+    ImageView imgPhone;
 
     private ArrayList<Individual> ambulanceList;
     private AmbulanceAdapter adapter;
@@ -84,7 +87,7 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
     private String deviceId =Build.DEVICE;
     private boolean isOnTrip;
     ValueEventListener statusListener;
-    Map<String, pinride.minhna.submission.ambulancenow.module.Place> maps;
+    private Map<String, pinride.minhna.submission.ambulancenow.module.Place> maps;
 
     public static VictimFragment newInstance() {
         Bundle args = new Bundle();
@@ -133,6 +136,7 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
                         communicationWith.setText(context.getString(R.string.from)+ " "+ AS.ambulanceName);
                         AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).removeEventListener(statusListener);
                         AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).removeValue();
+                        imgPhone.setVisibility(View.GONE);
                     }
                 } catch (Exception e){
                 }
@@ -185,6 +189,7 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
                     btnCreateTrip.setEnabled(false);
                     AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).removeEventListener(statusListener);
                     AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).setValue(values);
+                    imgPhone.setVisibility(View.GONE);
                 } else if (btnCreateTrip.getText().equals(context.getString(R.string.Cancel))) {
                     values.setVictimId(deviceId);
                     values.setAmbulanceId(AS.ambulanceId);
@@ -197,6 +202,7 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
                     communicationWith.setText(context.getString(R.string.no_pick_driver));
                     AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).removeEventListener(statusListener);
                     AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).setValue(values);
+                    imgPhone.setVisibility(View.GONE);
                 } else if (btnCreateTrip.getText().equals(context.getString(R.string.Find_driver_cap))) {
                     btnCreateTrip.setText(context.getString(R.string.Cancel));
                     status.setText(context.getString(R.string.Wait_for_response));
@@ -314,7 +320,9 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
         values.setVictimName(AS.userName);
         values.setVictimImgUrl(AS.profileImageUrl);
         values.setAddress(pickAddress.getText().toString());
+        values.setEndLatLng(AS.endLocation);
         AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).setValue(values);
+        imgPhone.setVisibility(View.VISIBLE);
 
         doMap();
     }
@@ -323,8 +331,8 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
         pinride.minhna.submission.ambulancenow.module.Place place = maps.get(AS.ambulanceName);
         AS.fromLocation = new LatLng(place.getLat(), place.getLng());
 
-        addMarker(AS.fromLocation, R.drawable.fa_map_marker_256_0_84ffff_none);
-        addMarker(AS.endLocation, R.drawable.fa_map_marker_256_0_ffe57f_none);
+        addMarker(AS.fromLocation, R.drawable.fa_map_marker_32_0_84ffff);
+        addMarker(AS.endLocation, R.drawable.fa_map_marker_32_0_ffe57f);
         Utils.getGoogleResult(Utils.routingGoogleUrl(AS.fromLocation, AS.endLocation))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -333,8 +341,8 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
                     public void call(RouteResult routeResult) {
                         if (routeResult.getListRoute().size() > 0) {
                             clearMap();
-                            addMarker(AS.fromLocation, R.drawable.fa_map_marker_256_0_84ffff_none);
-                            addMarker(AS.endLocation, R.drawable.fa_map_marker_256_0_ffe57f_none);
+                            addMarker(AS.fromLocation, R.drawable.fa_map_marker_32_0_84ffff);
+                            addMarker(AS.endLocation, R.drawable.fa_map_marker_32_0_ffe57f);
                             doPolyline(routeResult);
                         }
                     }
