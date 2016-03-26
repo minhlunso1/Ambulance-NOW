@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -89,8 +90,8 @@ public class AmbulanceFragment extends MapFragment implements GoogleApiClient.Co
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             android.location.Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
-            final LatLng tmp = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
             if (mLastLocation != null) {
+                final LatLng tmp = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                 Utils.getAddress(tmp)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -108,6 +109,8 @@ public class AmbulanceFragment extends MapFragment implements GoogleApiClient.Co
                             }
                         });
             }
+            else
+                Toast.makeText(context, context.getString(R.string.Please_turn_on_gps), Toast.LENGTH_SHORT).show();
         }
     }
 
