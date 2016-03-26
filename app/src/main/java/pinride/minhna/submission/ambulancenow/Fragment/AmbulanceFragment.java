@@ -1,4 +1,4 @@
-package pinride.minhna.submission.ambulancenow.Fragment;
+package pinride.minhna.submission.ambulancenow.fragment;
 
 import android.content.Context;
 import android.os.Build;
@@ -18,8 +18,8 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import pinride.minhna.submission.ambulancenow.AC;
-import pinride.minhna.submission.ambulancenow.AS;
+import pinride.minhna.submission.ambulancenow.compo.AC;
+import pinride.minhna.submission.ambulancenow.compo.AS;
 import pinride.minhna.submission.ambulancenow.R;
 import pinride.minhna.submission.ambulancenow.module.Status;
 
@@ -76,10 +76,12 @@ public class AmbulanceFragment extends MapFragment {
                 try {
                     Status status2 = snapshot.getValue(Status.class);
                     int statusCode = status2.getStatusCode();
+                    AS.vibrator.vibrate(500);
                     if (statusCode == AC.REQUEST_CODE) {
                         AS.myFirebaseRef.child(AC.AMBULANCE_STR).child(AS.ambulanceName).setValue("not ready");
                         AS.userName = status2.getVictimName();
                         Picasso.with(context).load(status2.getVictimImgUrl()).error(R.drawable.fa_child_256_0_84ffff_none).into(imgMiniAva);
+                        //pickAddress.setText(status2.getAddress());
                         btnCreateTrip.setEnabled(true);
                         status.setText(context.getString(R.string.Request));
                         communicationWith.setText(context.getString(R.string.from) + " " + AS.userName);
@@ -89,6 +91,7 @@ public class AmbulanceFragment extends MapFragment {
                         communicationWith.setText(context.getString(R.string.from) + " " + AS.userName);
                         btnCreateTrip.setEnabled(false);
                         btnCreateTrip.setText(context.getString(R.string.Accept));
+                        pickAddress.setText(context.getString(R.string.Pick_place_start));
                         AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).removeValue();
                     }
                 } catch (Exception e){
@@ -113,29 +116,27 @@ public class AmbulanceFragment extends MapFragment {
             public void onClick(View v) {
                 Status values = new Status();
                 if (btnCreateTrip.getText().equals(context.getString(R.string.Accept))) {
+                    values.setStatusCode(AC.ACCEPT_CODE);
                     btnCreateTrip.setText(context.getString(R.string.Arrived));
                     status.setText(context.getString(R.string.Still_waiting));
                     communicationWith.setText(context.getString(R.string.from) + " " + AS.userName);
-
-                    values.setVictimId(deviceId);
-                    values.setAmbulanceId(AS.ambulanceId);
-                    values.setStatusCode(AC.ACCEPT_CODE);
-                    values.setAmbulanceName(AS.ambulanceName);
-                    values.setVictimName(AS.userName);
-                } else if (btnCreateTrip.getText().equals("Arrive")) {
+                } else if (btnCreateTrip.getText().equals(context.getString(R.string.Arrived))) {
                     values.setStatusCode(AC.ARRIVE_CODE);
                     btnCreateTrip.setText(context.getString(R.string.End));
                     status.setText(context.getString(R.string.Static));
                     communicationWith.setText(context.getString(R.string.no_pick_driver));
                 } else if (btnCreateTrip.getText().equals(context.getString(R.string.End))) {
+                    AS.myFirebaseRef.child(AC.AMBULANCE_STR).child(AS.ambulanceName).setValue("ready");
+                    values.setStatusCode(AC.END_CODE);
                     btnCreateTrip.setText(context.getString(R.string.Accept));
                     status.setText(context.getString(R.string.Static));
+                    pickAddress.setText(context.getString(R.string.Pick_place_start));
                     communicationWith.setText(context.getString(R.string.no_pick_driver));
-                    AS.myFirebaseRef.child(AC.AMBULANCE_STR).child(AS.ambulanceName).setValue("ready");
                 }
                 AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).setValue(values);
             }
         });
+
     }
 
 }

@@ -1,4 +1,4 @@
-package pinride.minhna.submission.ambulancenow.Fragment;
+package pinride.minhna.submission.ambulancenow.fragment;
 
 import android.graphics.Point;
 import android.os.Bundle;

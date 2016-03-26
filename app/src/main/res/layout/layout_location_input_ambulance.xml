@@ -16,7 +16,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/ion_android_locate_256_0_84ffff_none" />
 
         <TextView
             android:id="@+id/tv_from"
@@ -69,7 +69,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/fa_child_256_0_84ffff_none" />
 
         <TextView
             android:id="@+id/tv_to"

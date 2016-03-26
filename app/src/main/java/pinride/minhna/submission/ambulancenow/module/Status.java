@@ -12,8 +12,17 @@ public class Status {
     private String ambulanceName;
     private String ambulanceImgUrl;
     private boolean isReady;
+    private String address;
 
     public Status(){}
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public boolean isReady() {
         return isReady;

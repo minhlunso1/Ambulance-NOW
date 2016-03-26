@@ -2,7 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants">
+
+    <ListView
+        android:id="@+id/lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:visibility="invisible">
+    </ListView>
 
     <RelativeLayout
         android:id="@+id/content_lv"
@@ -33,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_below="@id/ic_location"
-                android:background="@drawable/cb_state_button_cyan"
+                android:background="@drawable/cb_state_button_amber"
                 android:text="@string/Find_driver_cap"
                 android:enabled="false"/>
         </RelativeLayout>
@@ -46,7 +55,7 @@
             android:layout_above="@id/rl_info"
             android:layout_alignParentRight="true"
             android:layout_margin="8dp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/fa_map_marker_256_0_ffe57f_none"
             app:backgroundTint="#fafafa"
             app:borderWidth="0dp"
             app:elevation="4dp"

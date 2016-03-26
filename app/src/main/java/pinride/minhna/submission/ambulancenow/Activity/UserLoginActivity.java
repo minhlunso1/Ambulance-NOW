@@ -1,4 +1,4 @@
-package pinride.minhna.submission.ambulancenow.Activity;
+package pinride.minhna.submission.ambulancenow.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +12,8 @@ import com.firebase.ui.auth.core.FirebaseLoginError;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import pinride.minhna.submission.ambulancenow.AC;
-import pinride.minhna.submission.ambulancenow.AS;
+import pinride.minhna.submission.ambulancenow.compo.AC;
+import pinride.minhna.submission.ambulancenow.compo.AS;
 import pinride.minhna.submission.ambulancenow.R;
 
 /**
@@ -69,7 +69,7 @@ public class UserLoginActivity extends FirebaseLoginBaseActivity {
         super.onFirebaseLoggedIn(authData);
         if (authData.getProvider().equals("password")) {
             AS.userName = authData.getProviderData().get("email").toString();
-            AS.userName = AS.userName.substring(0, AS.userName.indexOf('@')+1);
+            AS.userName = AS.userName.substring(0, AS.userName.indexOf('@'));
             AS.profileImageUrl = authData.getProviderData().get("profileImageURL").toString();
             Intent intent = new Intent(UserLoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.putExtra("type", AC.VICTIM);

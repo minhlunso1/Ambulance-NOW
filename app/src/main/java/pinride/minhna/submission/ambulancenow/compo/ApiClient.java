@@ -1,4 +1,4 @@
-package pinride.minhna.submission.ambulancenow;
+package pinride.minhna.submission.ambulancenow.compo;
 
 
 import android.content.Context;

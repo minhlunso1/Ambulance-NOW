@@ -1,4 +1,4 @@
-package pinride.minhna.submission.ambulancenow;
+package pinride.minhna.submission.ambulancenow.compo;
 
 /**
  * Created by Minh on 3/25/2016.

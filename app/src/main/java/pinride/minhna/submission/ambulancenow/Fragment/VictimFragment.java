@@ -1,16 +1,18 @@
-package pinride.minhna.submission.ambulancenow.Fragment;
+package pinride.minhna.submission.ambulancenow.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,19 +26,31 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.greenrobot.event.EventBus;
-import pinride.minhna.submission.ambulancenow.AC;
-import pinride.minhna.submission.ambulancenow.AS;
-import pinride.minhna.submission.ambulancenow.AmbulanceDialog;
+import pinride.minhna.submission.ambulancenow.compo.AC;
+import pinride.minhna.submission.ambulancenow.compo.AS;
+import pinride.minhna.submission.ambulancenow.compo.AmbulanceAdapter;
 import pinride.minhna.submission.ambulancenow.R;
-import pinride.minhna.submission.ambulancenow.Utils;
+import pinride.minhna.submission.ambulancenow.compo.Utils;
+import pinride.minhna.submission.ambulancenow.map.CloudbikeLocation;
+import pinride.minhna.submission.ambulancenow.map.RouteResult;
+import pinride.minhna.submission.ambulancenow.map.Step;
+import pinride.minhna.submission.ambulancenow.map.ambLoc;
+import pinride.minhna.submission.ambulancenow.module.Individual;
 import pinride.minhna.submission.ambulancenow.module.Status;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -45,7 +59,7 @@ import rx.schedulers.Schedulers;
  * Created by Minh on 3/26/2016.
  */
 public class VictimFragment extends MapFragment implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener, AmbulanceAdapter.ItemClickListener {
 
     @Bind(R.id.tv_from_ex)
     TextView pickAddress;
@@ -55,6 +69,14 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
     TextView communicationWith;
     @Bind(R.id.btn_create_trip)
     Button btnCreateTrip;
+    @Bind(R.id.lv)
+    ListView lv;
+    @Bind(R.id.content_lv)
+    RelativeLayout content;
+
+    private ArrayList<Individual> ambulanceList;
+    private AmbulanceAdapter adapter;
+    private ProgressDialog progressDialog;
 
     private Context context;
     private GoogleApiClient mGoogleApiClient;
@@ -62,6 +84,7 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
     private String deviceId =Build.DEVICE;
     private boolean isOnTrip;
     ValueEventListener statusListener;
+    Map<String, pinride.minhna.submission.ambulancenow.module.Place> maps;
 
     public static VictimFragment newInstance() {
         Bundle args = new Bundle();
@@ -81,7 +104,6 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -96,19 +118,17 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
                     Status status2 = snapshot.getValue(Status.class);
                     String ambulanceId = status2.getAmbulanceId();
                     int statusCode = status2.getStatusCode();
+                    AS.vibrator.vibrate(500);
                     if (statusCode == AC.ACCEPT_CODE) {
-                        Status values = new Status();
                         btnCreateTrip.setText(context.getString(R.string.Cancel));
                         status.setText(context.getString(R.string.Accepted));
                         communicationWith.setText(context.getString(R.string.from)+ " "+ AS.ambulanceName);
                     } else if (statusCode == AC.ARRIVE_CODE) {
-                        Status values = new Status();
                         btnCreateTrip.setText(context.getString(R.string.Cancel));
                         status.setText(context.getString(R.string.Arrived));
                         communicationWith.setText(context.getString(R.string.from)+ " "+ AS.ambulanceName);
                     } else if (statusCode == AC.END_CODE) {
-                        Status values = new Status();
-                        btnCreateTrip.setText(context.getString(R.string.Cancel));
+                        btnCreateTrip.setText(context.getString(R.string.Find_driver_cap));
                         status.setText(context.getString(R.string.End));
                         communicationWith.setText(context.getString(R.string.from)+ " "+ AS.ambulanceName);
                         AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).removeEventListener(statusListener);
@@ -122,6 +142,8 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
             public void onCancelled(FirebaseError error) {
             }
         };
+
+        prepareAmbulanceList();
     }
 
     @Nullable
@@ -143,7 +165,6 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     private void setupView() {
@@ -164,30 +185,61 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
                     btnCreateTrip.setEnabled(false);
                     AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).removeEventListener(statusListener);
                     AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).setValue(values);
-                } else if (btnCreateTrip.getText().equals("Cancel")) {
+                } else if (btnCreateTrip.getText().equals(context.getString(R.string.Cancel))) {
                     values.setVictimId(deviceId);
                     values.setAmbulanceId(AS.ambulanceId);
                     values.setStatusCode(AC.CANCEL_CODE);
                     values.setAmbulanceName(AS.ambulanceName);
                     values.setVictimName(AS.userName);
-                    btnCreateTrip.setEnabled(false);
                     btnCreateTrip.setText(context.getString(R.string.Find_driver_cap));
+                    btnCreateTrip.setEnabled(true);
                     status.setText(context.getString(R.string.Static));
                     communicationWith.setText(context.getString(R.string.no_pick_driver));
                     AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).removeEventListener(statusListener);
                     AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).setValue(values);
                 } else if (btnCreateTrip.getText().equals(context.getString(R.string.Find_driver_cap))) {
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    AmbulanceDialog fragment = AmbulanceDialog.newInstance();
-                    fragment.show(fm, "tag");
+                    btnCreateTrip.setText(context.getString(R.string.Cancel));
+                    status.setText(context.getString(R.string.Wait_for_response));
+                    communicationWith.setText(context.getString(R.string.from)+ " "+ AS.ambulanceName);
+                    lv.setVisibility(View.VISIBLE);
+                    content.setVisibility(View.GONE);
                 }
 
             }
         });
+
+    }
+
+    private void prepareAmbulanceList() {
+        ambulanceList = new ArrayList<>();
+        adapter = new AmbulanceAdapter(getActivity(), ambulanceList, this);
+        lv.setAdapter(adapter);
+
+        AS.myFirebaseRef.child(AC.AMBULANCE_STR).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ambulanceList.clear();
+                for (DataSnapshot item:dataSnapshot.getChildren()) {
+                    if (item.getValue().equals("ready")) {
+                        maps = ambLoc.ambLoc();
+                        pinride.minhna.submission.ambulancenow.module.Place place = maps.get(item.getKey());
+                        ambulanceList.add(new Individual(item.getKey(), place.getAddress(), place.getLat(), place.getLng()));
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
     }
 
     @OnClick(R.id.btn_current_location)
     public void updateCurrentLocation(){
+        progressDialog = ProgressDialog.show(context, "Chờ", "Đang xử lý", true);
         Utils.getAddress(AS.currentLocation)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -199,10 +251,12 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
                         AS.endLocation = AS.currentLocation;
                         moveToLocation(AS.currentLocation);
                         btnCreateTrip.setEnabled(true);
+                        progressDialog.dismiss();
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
+                        progressDialog.dismiss();
                         throwable.printStackTrace();
                     }
                 });
@@ -247,19 +301,72 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
         }
     }
 
-    public void onEventMainThread(String event){
-        if (event.equals("request")){
-            Status values = new Status();
-            btnCreateTrip.setText(context.getString(R.string.Cancel));
-            status.setText(context.getString(R.string.Wait_for_response));
-            communicationWith.setText(context.getString(R.string.from)+ " "+ AS.ambulanceName);
-            values.setVictimId(deviceId);
-            values.setAmbulanceId(AS.ambulanceId);
-            values.setStatusCode(AC.REQUEST_CODE);
-            values.setAmbulanceName(AS.ambulanceName);
-            values.setVictimName(AS.userName);
-            values.setVictimImgUrl(AS.profileImageUrl);
-            AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).setValue(values);
+    @Override
+    public void onItemClick(int position) {
+        AS.ambulanceName=ambulanceList.get(position).getName();
+        lv.setVisibility(View.INVISIBLE);
+        content.setVisibility(View.VISIBLE);
+        AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).addValueEventListener(statusListener);
+        status.setText(context.getString(R.string.Wait_for_response));
+        communicationWith.setText(context.getString(R.string.from)+ " "+ AS.ambulanceName);
+        Status values = new Status();
+        values.setStatusCode(AC.REQUEST_CODE);
+        values.setVictimName(AS.userName);
+        values.setVictimImgUrl(AS.profileImageUrl);
+        values.setAddress(pickAddress.getText().toString());
+        AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).setValue(values);
+
+        doMap();
+    }
+
+    public void doMap(){
+        pinride.minhna.submission.ambulancenow.module.Place place = maps.get(AS.ambulanceName);
+        AS.fromLocation = new LatLng(place.getLat(), place.getLng());
+
+        addMarker(AS.fromLocation, R.drawable.fa_map_marker_256_0_84ffff_none);
+        addMarker(AS.endLocation, R.drawable.fa_map_marker_256_0_ffe57f_none);
+        Utils.getGoogleResult(Utils.routingGoogleUrl(AS.fromLocation, AS.endLocation))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<RouteResult>() {
+                    @Override
+                    public void call(RouteResult routeResult) {
+                        if (routeResult.getListRoute().size() > 0) {
+                            clearMap();
+                            addMarker(AS.fromLocation, R.drawable.fa_map_marker_256_0_84ffff_none);
+                            addMarker(AS.endLocation, R.drawable.fa_map_marker_256_0_ffe57f_none);
+                            doPolyline(routeResult);
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                });
+    }
+
+    public void doPolyline(RouteResult routeResult) {
+        clearLatLngBounds();
+        List<Step> mainStepList = routeResult.getListRoute().get(0).getListLegs().get(0).getListSteps();
+        CloudbikeLocation mainStartLocation = routeResult.getListRoute().get(0).getListLegs().get(0).getStartLocation();
+        CloudbikeLocation mainEndLocation = routeResult.getListRoute().get(0).getListLegs().get(0).getEndLocation();
+
+        getLatLngBounds().include(new LatLng(mainStartLocation.getLat(), mainStartLocation.getLng()));
+        getLatLngBounds().include(new LatLng(mainEndLocation.getLat(), mainEndLocation.getLng()));
+        setMainStep(mainStepList);
+        for (int i = 0; i < mainStepList.size(); i++) {
+            ArrayList<LatLng> polylineList = Utils.decodePoly(mainStepList.get(i).getPolyline().getPoints());
+            for (int j = 0; j < polylineList.size(); j++) {
+                getLatLngBounds().include(polylineList.get(j));
+            }
+            addPolyline(polylineList);
         }
+        LatLngBounds bounds = getLatLngBounds().build();
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels - 200;
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, Utils.dptopx(getContext(), 80));
+        moveToLocation(cu);
+        setCanMove(false);
     }
 }

@@ -3,25 +3,15 @@ package pinride.minhna.submission.ambulancenow.module;
 /**
  * Created by Minh on 3/26/2016.
  */
-public class Individual {
-    private String name;
+public class Place {
     private String address;
     private double lat;
     private double lng;
 
-    public Individual(String name, String address, double lat, double lng) {
-        this.name = name;
+    public Place(String address, double lat, double lng) {
         this.address = address;
         this.lat = lat;
         this.lng = lng;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getAddress() {

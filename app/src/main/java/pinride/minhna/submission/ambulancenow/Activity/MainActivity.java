@@ -1,13 +1,13 @@
-package pinride.minhna.submission.ambulancenow.Activity;
+package pinride.minhna.submission.ambulancenow.activity;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.FrameLayout;
-import pinride.minhna.submission.ambulancenow.AC;
-import pinride.minhna.submission.ambulancenow.Fragment.AmbulanceFragment;
-import pinride.minhna.submission.ambulancenow.Fragment.VictimFragment;
+import pinride.minhna.submission.ambulancenow.compo.AC;
+import pinride.minhna.submission.ambulancenow.fragment.AmbulanceFragment;
+import pinride.minhna.submission.ambulancenow.fragment.VictimFragment;
 
 public class MainActivity extends AppCompatActivity {
 

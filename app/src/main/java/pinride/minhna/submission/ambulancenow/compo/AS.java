@@ -1,4 +1,6 @@
-package pinride.minhna.submission.ambulancenow;
+package pinride.minhna.submission.ambulancenow.compo;
+
+import android.os.Vibrator;
 
 import com.firebase.client.Firebase;
 import com.google.android.gms.maps.model.LatLng;
@@ -17,4 +19,5 @@ public class AS {
     public static String ambulanceId;
     public static String ambulanceName;
     public static String key = "status_hackathon";
+    public static Vibrator vibrator;
 }

@@ -1,10 +1,11 @@
-package pinride.minhna.submission.ambulancenow;
+package pinride.minhna.submission.ambulancenow.compo;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -12,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import pinride.minhna.submission.ambulancenow.R;
 import pinride.minhna.submission.ambulancenow.module.Individual;
 
 /**
@@ -20,27 +22,37 @@ import pinride.minhna.submission.ambulancenow.module.Individual;
 public class AmbulanceAdapter extends ArrayAdapter<Individual> {
 
     private Context context;
+    private ItemClickListener listener;
 
-    public AmbulanceAdapter(Context context, ArrayList<Individual> items) {
+    public interface ItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public AmbulanceAdapter(Context context, ArrayList<Individual> items, ItemClickListener listener) {
         super(context, 0, items);
         this.context=context;
+        this.listener = listener;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         Individual item = getItem(position);
         if (convertView==null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_driver_request_new, parent, false);
         }
 
-        CircleImageView img = (CircleImageView) convertView.findViewById(R.id.img_avatar);
         TextView tvName = (TextView) convertView.findViewById(R.id.tv_ambulance);
+        TextView tvAddress = (TextView) convertView.findViewById(R.id.tv_ambulance_addr);
+        Button btnReq = (Button) convertView.findViewById(R.id.btn_request);
 
-        Picasso.with(context)
-                .load(item.getImgUrl())
-                .placeholder(R.drawable.fa_ambulance_256_0_ffe57f_none)
-                .into(img);
+        btnReq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(position);
+            }
+        });
         tvName.setText(item.getName());
+        tvAddress.setText(item.getAddress());
 
         return convertView;
     }
