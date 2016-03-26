@@ -23,6 +23,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import pinride.minhna.submission.ambulancenow.R;
 import pinride.minhna.submission.ambulancenow.map.Step;
 
 /**

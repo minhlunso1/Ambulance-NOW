@@ -12,7 +12,8 @@ import com.firebase.ui.auth.core.FirebaseLoginError;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import pinride.minhna.submission.ambulancenow.MainActivity;
+import pinride.minhna.submission.ambulancenow.AC;
+import pinride.minhna.submission.ambulancenow.AS;
 import pinride.minhna.submission.ambulancenow.R;
 
 /**
