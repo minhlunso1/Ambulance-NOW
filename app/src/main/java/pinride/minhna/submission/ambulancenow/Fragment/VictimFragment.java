@@ -319,8 +319,10 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
         values.setStatusCode(AC.REQUEST_CODE);
         values.setVictimName(AS.userName);
         values.setVictimImgUrl(AS.profileImageUrl);
+        values.setLat(AS.endLocation.latitude);
+        values.setLng(AS.endLocation.longitude);
         values.setAddress(pickAddress.getText().toString());
-        values.setEndLatLng(AS.endLocation);
+
         AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).setValue(values);
         imgPhone.setVisibility(View.VISIBLE);
 
@@ -376,5 +378,10 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, Utils.dptopx(getContext(), 80));
         moveToLocation(cu);
         setCanMove(false);
+    }
+
+    @OnClick(R.id.img_phone)
+    public void call(){
+        Utils.call(context);
     }
 }

@@ -193,7 +193,7 @@ public class MapFragment extends Fragment {
     public void addPolyline(ArrayList<LatLng> polylineList) {
         if (mMap != null) {
             try {
-                mMap.addPolyline(new PolylineOptions().geodesic(true).addAll(polylineList).width(10f).color(getActivity().getResources().getColor(R.color.colorAccent)));
+                mMap.addPolyline(new PolylineOptions().geodesic(true).addAll(polylineList).width(10f).color(getActivity().getResources().getColor(R.color.v3_seaweed_green)));
             } catch (Exception e) {
                 e.printStackTrace();
             }

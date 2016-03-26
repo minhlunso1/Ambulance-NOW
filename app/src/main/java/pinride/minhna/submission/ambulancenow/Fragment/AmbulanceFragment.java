@@ -26,9 +26,11 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pinride.minhna.submission.ambulancenow.compo.AC;
 import pinride.minhna.submission.ambulancenow.compo.AS;
 import pinride.minhna.submission.ambulancenow.R;
+import pinride.minhna.submission.ambulancenow.compo.SoundHelper;
 import pinride.minhna.submission.ambulancenow.compo.Utils;
 import pinride.minhna.submission.ambulancenow.map.CloudbikeLocation;
 import pinride.minhna.submission.ambulancenow.map.RouteResult;
@@ -98,10 +100,11 @@ public class AmbulanceFragment extends MapFragment {
                     int statusCode = status2.getStatusCode();
                     AS.vibrator.vibrate(500);
                     if (statusCode == AC.REQUEST_CODE) {
+                        SoundHelper.run(context, R.raw.alarm, 0);
                         AS.myFirebaseRef.child(AC.AMBULANCE_STR).child(AS.ambulanceName).setValue("not ready");
                         AS.userName = status2.getVictimName();
                         Picasso.with(context).load(status2.getVictimImgUrl()).error(R.drawable.fa_child_32_0_84ffff).into(imgMiniAva);
-                        //pickAddress.setText(status2.getAddress());
+                        pickAddress.setText(status2.getAddress());
                         btnCreateTrip.setEnabled(true);
                         status.setText(context.getString(R.string.Request));
                         communicationWith.setText(context.getString(R.string.from) + " " + AS.userName);
@@ -110,7 +113,7 @@ public class AmbulanceFragment extends MapFragment {
                         maps = ambLoc.ambLoc();
                         pinride.minhna.submission.ambulancenow.module.Place place = maps.get(AS.ambulanceName);
                         AS.fromLocation = new LatLng(place.getLat(), place.getLng());
-                        AS.endLocation = status2.getEndLatLng();
+                        AS.endLocation = new LatLng(status2.getLat(), status2.getLng());
                         doMap();
                     } else if (statusCode == AC.END_CODE || statusCode == AC.CANCEL_CODE) {
                         AS.myFirebaseRef.child(AC.AMBULANCE_STR).child(AS.ambulanceName).setValue("ready");
@@ -144,6 +147,7 @@ public class AmbulanceFragment extends MapFragment {
             public void onClick(View v) {
                 Status values = new Status();
                 if (btnCreateTrip.getText().equals(context.getString(R.string.Accept))) {
+                    SoundHelper.stop();
                     values.setStatusCode(AC.ACCEPT_CODE);
                     btnCreateTrip.setText(context.getString(R.string.Arrived));
                     status.setText(context.getString(R.string.Still_waiting));
@@ -217,6 +221,11 @@ public class AmbulanceFragment extends MapFragment {
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, Utils.dptopx(getContext(), 80));
         moveToLocation(cu);
         setCanMove(false);
+    }
+
+    @OnClick(R.id.img_phone)
+    public void call(){
+        Utils.call(context);
     }
 
 }
