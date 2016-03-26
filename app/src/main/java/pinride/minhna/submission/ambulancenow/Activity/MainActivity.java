@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
         import android.widget.FrameLayout;
 
         import pinride.minhna.submission.ambulancenow.AC;
-        import pinride.minhna.submission.ambulancenow.R;
+import pinride.minhna.submission.ambulancenow.AmbulanceFragment;
 
 public class MainActivity extends AppCompatActivity {
 
