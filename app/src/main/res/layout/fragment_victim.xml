@@ -4,48 +4,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/layout_map" />
-
     <RelativeLayout
-        android:id="@+id/rl_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="8dp">
+        android:id="@+id/content_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/ic_location"
-            layout="@layout/layout_location_input_victim"
+        <include layout="@layout/layout_map" />
+
+        <RelativeLayout
+            android:id="@+id/rl_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
+            android:layout_alignParentBottom="true"
+            android:layout_margin="8dp">
 
-        <Button
-            android:id="@+id/btn_create_trip"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_below="@id/ic_location"
-            android:background="@drawable/cb_state_button_cyan"
-            android:text="@string/Request"
-            android:enabled="false"/>
+            <include
+                android:id="@+id/ic_location"
+                layout="@layout/layout_location_input_victim"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:id="@+id/btn_create_trip"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@id/ic_location"
+                android:background="@drawable/cb_state_button_cyan"
+                android:text="@string/Find_driver_cap"
+                android:enabled="false"/>
+        </RelativeLayout>
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_current_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/rl_info"
+            android:layout_alignParentRight="true"
+            android:layout_margin="8dp"
+            android:src="@mipmap/ic_launcher"
+            app:backgroundTint="#fafafa"
+            app:borderWidth="0dp"
+            app:elevation="4dp"
+            app:fabSize="normal"
+            app:pressedTranslationZ="4dp"
+            app:rippleColor="@color/ripple_color" />
+
     </RelativeLayout>
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btn_current_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/rl_info"
-        android:layout_alignParentRight="true"
-        android:layout_margin="8dp"
-        android:src="@mipmap/ic_launcher"
-        app:backgroundTint="#fafafa"
-        app:borderWidth="0dp"
-        app:elevation="4dp"
-        app:fabSize="normal"
-        app:pressedTranslationZ="4dp"
-        app:rippleColor="@color/ripple_color" />
 </RelativeLayout>

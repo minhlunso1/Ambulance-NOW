@@ -67,8 +67,8 @@ public class AmbulanceLoginActivity extends FirebaseLoginBaseActivity {
     @Override
     protected void onFirebaseLoggedIn(AuthData authData) {
         super.onFirebaseLoggedIn(authData);
-        AS.userName = authData.getProviderData().get("email").toString();
-        AS.userName = AS.userName.substring(0, AS.userName.indexOf('@')+1);
+        AS.ambulanceName = authData.getProviderData().get("email").toString();
+        AS.ambulanceName = AS.ambulanceName.substring(0, AS.ambulanceName.indexOf('@'));
         AS.profileImageUrl = authData.getProviderData().get("profileImageURL").toString();
         Intent intent = new Intent(AmbulanceLoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("type", AC.AMBULANCE);

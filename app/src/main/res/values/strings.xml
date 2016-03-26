@@ -27,4 +27,8 @@
     <string name="Cancel">Hủy</string>
     <string name="Please_turn_on_gps">Vui lòng kiểm tra GPS</string>
     <string name="Please_get_another_location">Vui lòng chọn địa điểm khác</string>
+    <string name="Wait_for_response">Chờ phản hồi</string>
+    <string name="from">từ</string>
+    <string name="Accepted">Đã chấp nhận</string>
+    <string name="Still_waiting">Đang chờ</string>
 </resources>

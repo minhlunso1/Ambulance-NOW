@@ -14,4 +14,7 @@ public class AS {
     public static LatLng endLocation;
     public static LatLng currentLocation = new LatLng(11.054282, 106.683191);
     public static ApiClient apiClient;
+    public static String ambulanceId;
+    public static String ambulanceName;
+    public static String key = "status_hackathon";
 }
