@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,8 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
     TextView status;
     @Bind(R.id.tv_to_ex)
     TextView communicationWith;
+    @Bind(R.id.btn_create_trip)
+    Button btnCreateTrip;
 
     private Context context;
     private GoogleApiClient mGoogleApiClient;
@@ -69,8 +72,8 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
 
     @Override
     public void onStart() {
-        mGoogleApiClient.connect();
         super.onStart();
+        mGoogleApiClient.connect();
     }
 
     @Nullable
@@ -84,13 +87,23 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         mGoogleApiClient.disconnect();
     }
 
-    private void setupView() {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
+    private void setupView() {
+        btnCreateTrip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @OnClick(R.id.btn_current_location)
@@ -104,6 +117,7 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
                         pickAddress.setTextColor(getResources().getColor(R.color.v2_greyish_brown));
                         pickAddress.setText(s);
                         AS.endLocation = AS.currentLocation;
+                        moveToLocation(AS.currentLocation);
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -112,7 +126,7 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
                     }
                 });
     }
-    @OnClick(R.id.tv_from_ex)
+    @OnClick(R.id.rl_from)
     public void switchMap(){
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
@@ -145,6 +159,7 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
                 if (!place.getAddress().equals("")) {
                     pickAddress.setText(place.getName() + ", " + place.getAddress());
                     AS.endLocation = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
+                    btnCreateTrip.setEnabled(true);
                 } else
                     Toast.makeText(context, context.getString(R.string.Please_get_another_location), Toast.LENGTH_LONG).show();
             }
