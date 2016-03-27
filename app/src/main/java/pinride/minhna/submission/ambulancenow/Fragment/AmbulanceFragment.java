@@ -98,7 +98,6 @@ public class AmbulanceFragment extends MapFragment {
                 try {
                     Status status2 = snapshot.getValue(Status.class);
                     int statusCode = status2.getStatusCode();
-                    AS.vibrator.vibrate(500);
                     if (statusCode == AC.REQUEST_CODE) {
                         SoundHelper.run(context, R.raw.alarm, 0);
                         AS.myFirebaseRef.child(AC.AMBULANCE_STR).child(AS.ambulanceName).setValue("not ready");
@@ -107,7 +106,10 @@ public class AmbulanceFragment extends MapFragment {
                         pickAddress.setText(status2.getAddress());
                         btnCreateTrip.setEnabled(true);
                         status.setText(context.getString(R.string.Request));
-                        communicationWith.setText(context.getString(R.string.from) + " " + AS.userName);
+                        if (AS.ambulanceName == null)
+                            communicationWith.setText(context.getString(R.string.from) + " " + context.getString(R.string.customer));
+                        else
+                            communicationWith.setText(context.getString(R.string.from) + " " + AS.userName);
                         imgPhone.setVisibility(View.VISIBLE);
 
                         maps = ambLoc.ambLoc();
@@ -116,9 +118,13 @@ public class AmbulanceFragment extends MapFragment {
                         AS.endLocation = new LatLng(status2.getLat(), status2.getLng());
                         doMap();
                     } else if (statusCode == AC.END_CODE || statusCode == AC.CANCEL_CODE) {
+                        SoundHelper.runWithoutLooping(context, R.raw.notify, 0);
                         AS.myFirebaseRef.child(AC.AMBULANCE_STR).child(AS.ambulanceName).setValue("ready");
                         status.setText(context.getString(R.string.End));
-                        communicationWith.setText(context.getString(R.string.from) + " " + AS.userName);
+                        if (AS.ambulanceName == null)
+                            communicationWith.setText(context.getString(R.string.from) + " " + context.getString(R.string.customer));
+                        else
+                            communicationWith.setText(context.getString(R.string.from) + " " + AS.userName);
                         btnCreateTrip.setEnabled(false);
                         btnCreateTrip.setText(context.getString(R.string.Accept));
                         pickAddress.setText(context.getString(R.string.Pick_place_start));

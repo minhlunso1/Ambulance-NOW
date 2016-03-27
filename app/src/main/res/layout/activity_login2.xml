@@ -16,7 +16,7 @@
         android:layout_margin="16dp"
         android:padding="8dp"
         android:gravity="center_horizontal"
-        android:text="email:ambulance_chasis@pinride.me\npassword:123456789"
+        android:text="email:tung_ambu@pinride.me\npassword:123"
         app:tooltipColor="@color/colorPrimaryDark"
         android:textColor="@color/white"
         android:textStyle="bold"

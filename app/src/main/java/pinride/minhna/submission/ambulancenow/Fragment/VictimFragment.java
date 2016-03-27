@@ -44,6 +44,7 @@ import pinride.minhna.submission.ambulancenow.compo.AC;
 import pinride.minhna.submission.ambulancenow.compo.AS;
 import pinride.minhna.submission.ambulancenow.compo.AmbulanceAdapter;
 import pinride.minhna.submission.ambulancenow.R;
+import pinride.minhna.submission.ambulancenow.compo.SoundHelper;
 import pinride.minhna.submission.ambulancenow.compo.Utils;
 import pinride.minhna.submission.ambulancenow.map.CloudbikeLocation;
 import pinride.minhna.submission.ambulancenow.map.RouteResult;
@@ -51,7 +52,6 @@ import pinride.minhna.submission.ambulancenow.map.Step;
 import pinride.minhna.submission.ambulancenow.map.ambLoc;
 import pinride.minhna.submission.ambulancenow.module.Individual;
 import pinride.minhna.submission.ambulancenow.module.Status;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -121,19 +121,30 @@ public class VictimFragment extends MapFragment implements GoogleApiClient.Conne
                     Status status2 = snapshot.getValue(Status.class);
                     String ambulanceId = status2.getAmbulanceId();
                     int statusCode = status2.getStatusCode();
-                    AS.vibrator.vibrate(500);
                     if (statusCode == AC.ACCEPT_CODE) {
+                        SoundHelper.runWithoutLooping(context, R.raw.notify, 0);
                         btnCreateTrip.setText(context.getString(R.string.Cancel));
                         status.setText(context.getString(R.string.Accepted));
-                        communicationWith.setText(context.getString(R.string.from)+ " "+ AS.ambulanceName);
+                        if (AS.ambulanceName == null)
+                            communicationWith.setText(context.getString(R.string.from)+ " "+ context.getString(R.string.vehicle));
+                        else
+                            communicationWith.setText(context.getString(R.string.from)+ " "+ AS.ambulanceName);
                     } else if (statusCode == AC.ARRIVE_CODE) {
+                        SoundHelper.runWithoutLooping(context, R.raw.notify, 0);
                         btnCreateTrip.setText(context.getString(R.string.Cancel));
                         status.setText(context.getString(R.string.Arrived));
-                        communicationWith.setText(context.getString(R.string.from)+ " "+ AS.ambulanceName);
+                        if (AS.ambulanceName == null)
+                            communicationWith.setText(context.getString(R.string.from)+ " "+ context.getString(R.string.vehicle));
+                        else
+                            communicationWith.setText(context.getString(R.string.from)+ " "+ AS.ambulanceName);
                     } else if (statusCode == AC.END_CODE) {
+                        SoundHelper.runWithoutLooping(context, R.raw.notify, 0);
                         btnCreateTrip.setText(context.getString(R.string.Find_driver_cap));
                         status.setText(context.getString(R.string.End));
-                        communicationWith.setText(context.getString(R.string.from)+ " "+ AS.ambulanceName);
+                        if (AS.ambulanceName == null)
+                            communicationWith.setText(context.getString(R.string.no_pick_driver));
+                        else
+                            communicationWith.setText(context.getString(R.string.from)+ " "+ AS.ambulanceName);
                         AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).removeEventListener(statusListener);
                         AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).removeValue();
                         imgPhone.setVisibility(View.GONE);
