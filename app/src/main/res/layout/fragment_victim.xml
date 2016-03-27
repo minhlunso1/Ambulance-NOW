@@ -55,7 +55,7 @@
             android:layout_above="@id/rl_info"
             android:layout_alignParentRight="true"
             android:layout_margin="8dp"
-            android:src="@drawable/fa_map_marker_32_0_ffe57f"
+            android:src="@drawable/fa_locate_32_0_ffe57f"
             app:backgroundTint="#fafafa"
             app:borderWidth="0dp"
             app:elevation="4dp"

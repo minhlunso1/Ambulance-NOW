@@ -21,6 +21,8 @@ import pinride.minhna.submission.ambulancenow.R;
  */
 public class UserLoginActivity extends FirebaseLoginBaseActivity {
 
+    private boolean canLogin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +38,7 @@ public class UserLoginActivity extends FirebaseLoginBaseActivity {
 
     @OnClick(R.id.btn_login)
     public void login(){
+        canLogin=true;
         showFirebaseLoginPrompt();
     }
     @OnClick(R.id.btn_quit)
@@ -67,20 +70,24 @@ public class UserLoginActivity extends FirebaseLoginBaseActivity {
     @Override
     protected void onFirebaseLoggedIn(AuthData authData) {
         super.onFirebaseLoggedIn(authData);
-        if (authData.getProvider().equals("password")) {
-            AS.userName = authData.getProviderData().get("email").toString();
-            AS.userName = AS.userName.substring(0, AS.userName.indexOf('@'));
-            AS.profileImageUrl = authData.getProviderData().get("profileImageURL").toString();
-            Intent intent = new Intent(UserLoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.putExtra("type", AC.VICTIM);
-            startActivity(intent);
-        } else {
-            try {
-                logout();
-                resetFirebaseLoginPrompt();
-            } catch (NullPointerException e){
-                e.printStackTrace();
+        if (canLogin) {
+            if (authData.getProvider().equals("password")) {
+                AS.userName = authData.getProviderData().get("email").toString();
+                AS.userName = AS.userName.substring(0, AS.userName.indexOf('@'));
+                AS.profileImageUrl = authData.getProviderData().get("profileImageURL").toString();
+                Intent intent = new Intent(UserLoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("type", AC.VICTIM);
+                startActivity(intent);
+            } else {
+                try {
+                    logout();
+                    resetFirebaseLoginPrompt();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
+        } else {
+            logout();
         }
     }
 

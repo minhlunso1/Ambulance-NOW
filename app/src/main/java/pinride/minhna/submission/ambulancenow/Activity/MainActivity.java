@@ -5,7 +5,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.FrameLayout;
+
+import com.firebase.client.Firebase;
+import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
+import com.firebase.ui.auth.core.FirebaseLoginError;
+
 import pinride.minhna.submission.ambulancenow.compo.AC;
+import pinride.minhna.submission.ambulancenow.compo.AS;
 import pinride.minhna.submission.ambulancenow.fragment.AmbulanceFragment;
 import pinride.minhna.submission.ambulancenow.fragment.VictimFragment;
 

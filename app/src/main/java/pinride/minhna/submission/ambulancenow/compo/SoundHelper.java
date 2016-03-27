@@ -1,6 +1,7 @@
 package pinride.minhna.submission.ambulancenow.compo;
 
 import android.content.Context;
+import android.media.ExifInterface;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
 
@@ -19,13 +20,17 @@ public class SoundHelper {
         HandlerHelper.run(new HandlerHelper.IHandlerDo() {
             @Override
             public void doThis() {
-                if (context != null) {
-                    mp = MediaPlayer.create(context, file);
-                    vi = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-                    long[] pattern = {0, 100, 1000};
-                    vi.vibrate(pattern, 0);
-                    mp.setLooping(true);
-                    mp.start();
+                try {
+                    if (context != null) {
+                        mp = MediaPlayer.create(context, file);
+                        vi = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                        long[] pattern = {0, 100, 1000};
+                        vi.vibrate(pattern, 0);
+                        mp.setLooping(true);
+                        mp.start();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }, delay);
