@@ -36,13 +36,33 @@ public class SoundHelper {
         }, delay);
     }
 
-    public static void stop() {
-        if (mp != null) {
-            mp.stop();
-        }
+    public static void runWithoutLooping(final Context context, final int file, int delay) {
+        HandlerHelper.run(new HandlerHelper.IHandlerDo() {
+            @Override
+            public void doThis() {
+                try {
+                    if (context != null) {
+                        mp = MediaPlayer.create(context, file);
+                        vi = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                        long[] pattern = {0, 100, 1000};
+                        //vi.vibrate(pattern, 0);
+                        mp.setLooping(false);
+                        mp.start();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, delay);
+    }
 
-        if (vi != null) {
+    public static void stop() {
+        try {
+            mp.stop();
+
             vi.cancel();
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

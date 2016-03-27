@@ -98,7 +98,6 @@ public class AmbulanceFragment extends MapFragment {
                 try {
                     Status status2 = snapshot.getValue(Status.class);
                     int statusCode = status2.getStatusCode();
-                    AS.vibrator.vibrate(500);
                     if (statusCode == AC.REQUEST_CODE) {
                         SoundHelper.run(context, R.raw.alarm, 0);
                         AS.myFirebaseRef.child(AC.AMBULANCE_STR).child(AS.ambulanceName).setValue("not ready");
@@ -119,7 +118,7 @@ public class AmbulanceFragment extends MapFragment {
                         AS.endLocation = new LatLng(status2.getLat(), status2.getLng());
                         doMap();
                     } else if (statusCode == AC.END_CODE || statusCode == AC.CANCEL_CODE) {
-                        SoundHelper.run(context, R.raw.notify, 0);
+                        SoundHelper.runWithoutLooping(context, R.raw.notify, 0);
                         AS.myFirebaseRef.child(AC.AMBULANCE_STR).child(AS.ambulanceName).setValue("ready");
                         status.setText(context.getString(R.string.End));
                         if (AS.ambulanceName == null)
@@ -131,7 +130,6 @@ public class AmbulanceFragment extends MapFragment {
                         pickAddress.setText(context.getString(R.string.Pick_place_start));
                         AS.myFirebaseRef.child(AS.key).child(AS.ambulanceName).removeValue();
                         imgPhone.setVisibility(View.GONE);
-                        SoundHelper.stop();
                     }
                 } catch (Exception e){
                 }
